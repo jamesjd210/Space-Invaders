@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <cstdint>
 
 #define GL_ERROR_CASE(glerror)\
     case glerror : snprintf(error, sizeof(error), "%s", #glerror)
@@ -30,6 +31,22 @@ void errorCallback(int error, const char* description) {
     fprintf(stderr, "Error: %s\n", description);
 }
 
+struct Buffer {
+    size_t width, height;
+    uint32_t* data;
+};
+
+void clearBuffer(Buffer* buffer, uint32_t color) {
+    for(size_t i = 0; i < (buffer->width * buffer->height); i++) {
+        buffer->data[i] = color;
+    }
+}
+
+
+uint32_t rgb_to_uint32(uint8_t r, uint8_t g, uint8_t b)
+{
+    return (r << 24) | (g << 16) | (b << 8) | 255;
+}
 
 int main(int argc, char* argv[]) {
     glfwSetErrorCallback(errorCallback);
